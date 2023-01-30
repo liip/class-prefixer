@@ -17,8 +17,11 @@
     "publish": "lerna publish from-git"
   },
   "workspaces": [
-    "packages/postcss-class-prefixer",
-    "packages/class-prefixer-core"
+    "packages/class-prefixer-ast-visitor",
+    "packages/class-prefixer-core",
+    "packages/esbuild-plugin-ast",
+    "packages/esbuild-plugin-ast-vue",
+    "packages/postcss-class-prefixer"
   ],
   "devDependencies": {
     "@jest/types": "^29.5.0",

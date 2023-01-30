@@ -1,0 +1,41 @@
+{
+  "name": "@liip/esbuild-plugin-ast-vue",
+  "version": "0.0.1",
+  "description": "Esbuild plugin to parse Vue AST",
+  "main": "dist/plugin.js",
+  "keywords": [
+    "esbuild",
+    "plugin",
+    "ast",
+    "vue"
+  ],
+  "author": {
+    "name": "Liip",
+    "url": "https://www.liip.ch/"
+  },
+  "license": "MIT",
+  "scripts": {
+    "dev": "tsc -w -p ./tsconfig.build.json",
+    "build": "tsc -p ./tsconfig.build.json",
+    "lint": "eslint \"src/**/*.ts\"",
+    "lint:fix": "npm run lint -- --fix",
+    "format": "prettier '**/!(dist)/*.@(ts|json|md)' --check",
+    "format:fix": "npm run format -- --write",
+    "test": "NODE_ENV=test jest",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/convert-source-map": "^2.0.0",
+    "@types/hash-sum": "^1.0.0",
+    "esbuild": "^0.18.6"
+  },
+  "dependencies": {
+    "@liip/esbuild-plugin-ast": "^0.0.1",
+    "@vue/compiler-sfc": "^3.3.4",
+    "convert-source-map": "^2.0.0",
+    "hash-sum": "^2.0.0"
+  },
+  "peerDependencies": {
+    "esbuild": ">= 0.18"
+  }
+}

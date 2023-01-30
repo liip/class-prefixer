@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "references": [{ "path": "../esbuild-plugin-ast" }],
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist"
+  },
+  "include": ["src"]
+}
