@@ -1,0 +1,163 @@
+/* stylelint-disable selector-max-id, selector-no-qualifying-type, no-duplicate-selectors */
+
+:root {
+  --display: block;
+}
+
+html,
+body {
+  display: block;
+}
+
+body .prefix-btn {
+  display: block;
+}
+
+[dir='rtl'] {
+  display: block;
+}
+
+[dir='rtl'].prefix-btn .prefix-btn--small {
+  display: block;
+}
+
+[dir='rtl'] .prefix-btn {
+  display: block;
+}
+
+[data-exclude] .prefix-btn {
+  display: block;
+}
+
+* {
+  display: block;
+}
+
+:hover {
+  display: block;
+}
+
+#btn,
+#btn.prefix-btn,
+#btn .prefix-btn,
+#btn button,
+#btn button.prefix-btn,
+#btn button .prefix-btn {
+  display: block;
+}
+
+.prefix-btn {
+  display: block;
+}
+
+.prefix-btn.prefix-btn--small {
+  display: block;
+}
+
+.prefix-btn .prefix-btn--small {
+  display: block;
+}
+
+.prefix-btn,
+.prefix-btn.prefix-btn--small,
+.prefix-btn .prefix-btn--small,
+.prefix-btn > .prefix-btn--small,
+.prefix-btn + .prefix-btn--small {
+  display: block;
+}
+
+.prefix-btn span,
+.prefix-btn span.prefix-btn--small,
+.prefix-btn span .prefix-btn--small {
+  display: block;
+}
+
+.prefix-btn:hover,
+.prefix-btn:active,
+.prefix-btn:focus {
+  display: block;
+}
+
+.prefix-btn::after,
+.prefix-btn::before {
+  display: block;
+}
+
+.prefix-btn:not(.prefix-btn--small),
+.prefix-btn:is(.prefix-btn--small, .prefix-btn--large),
+.prefix-btn:where(.prefix-btn--small, .prefix-btn--large) .prefix-btn--primary {
+  display: block;
+}
+
+button:not(.prefix-btn--small),
+button:is(.prefix-btn, .prefix-btn--small),
+button:where(.prefix-btn, .prefix-btn--small):hover::after {
+  display: block;
+}
+
+.prefix-btn[data-attr='some-value'] {
+  display: block;
+}
+
+.excluded,
+.excluded.prefix-btn,
+.excluded .prefix-btn,
+.excluded > .prefix-btn,
+.prefix-btn.reg-exclude,
+.prefix-btn .prefix-is-not-reg-exclude,
+.prefix-btn:not(.excluded),
+.prefix-btn:is(.excluded, .reg-exclude, .prefix-is-not-reg-exclude) .excluded {
+  display: block;
+}
+
+.md\:prefix-btn {
+  display: block;
+}
+
+.max-md\:excluded {
+  display: block;
+}
+
+.md\:excluded.prefix-btn {
+  display: block;
+}
+
+.md\:prefix-btn.prefix-btn--small {
+  display: block;
+}
+
+.max-md\:prefix-btn .prefix-btn--small {
+  display: block;
+}
+
+[dir='rtl'] .max-md\:prefix-btn .prefix-btn--small {
+  display: block;
+}
+
+.max-md\:prefix-btn:where(.prefix-btn--small, .prefix-btn--large)
+  .prefix-btn--primary {
+  display: block;
+}
+
+@media screen {
+  .prefix-btn,
+  .prefix-btn .excluded {
+    display: block;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .prefix-btn:is(.prefix-btn--small, .prefix-btn--large):hover
+    .prefix-btn--primary.excluded {
+    display: block;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

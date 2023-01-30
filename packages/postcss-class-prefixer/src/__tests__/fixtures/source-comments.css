@@ -1,0 +1,149 @@
+/* stylelint-disable selector-max-id, selector-no-qualifying-type, no-duplicate-selectors */
+
+:root {
+  --display: block;
+}
+
+html,
+body {
+  display: block;
+}
+
+body .btn {
+  display: block;
+}
+
+[dir='rtl'] {
+  display: block;
+}
+
+[dir='rtl'].btn .btn--small {
+  display: block;
+}
+
+[dir='rtl'] .btn {
+  display: block;
+}
+
+[data-exclude] .btn {
+  display: block;
+}
+
+* {
+  display: block;
+}
+
+:hover {
+  display: block;
+}
+
+#btn,
+#btn.btn,
+#btn .btn,
+#btn button,
+#btn button.btn,
+#btn button .btn {
+  display: block;
+}
+
+/* class-prefixer-disable */
+.btn {
+  display: block;
+}
+/* class-prefixer-enable */
+
+/* class-prefixer-disable prefix*/
+.btn.btn--small {
+  display: block;
+}
+/* class-prefixer-enable prefix */
+
+/* class-prefixer-disable container */
+.btn .btn--small {
+  display: block;
+}
+/* class-prefixer-enable container */
+
+/* class-prefixer-disable */
+.btn,
+.btn.btn--small,
+.btn .btn--small,
+.btn > .btn--small,
+.btn + .btn--small {
+  display: block;
+}
+/* class-prefixer-enable */
+
+.btn span,
+.btn span.btn--small,
+.btn span .btn--small {
+  display: block;
+}
+
+/* class-prefixer-disable prefix */
+.btn:hover,
+.btn:active,
+.btn:focus {
+  display: block;
+}
+
+.btn::after,
+.btn::before {
+  display: block;
+}
+
+.btn:not(.btn--small),
+.btn:is(.btn--small, .btn--large),
+.btn:where(.btn--small, .btn--large) .btn--primary {
+  display: block;
+}
+/* class-prefixer-enable prefix */
+
+button:not(.btn--small),
+button:is(.btn, .btn--small),
+button:where(.btn, .btn--small):hover::after {
+  display: block;
+}
+
+.btn[data-attr='some-value'] {
+  display: block;
+}
+
+/* class-prefixer-disable container */
+.btn {
+  display: block;
+}
+
+.excluded,
+.excluded.btn,
+.excluded .btn,
+.excluded > .btn,
+.btn.reg-exclude,
+.btn .is-not-reg-exclude,
+.btn:not(.excluded),
+.btn:is(.excluded, .reg-exclude, .is-not-reg-exclude) .excluded {
+  display: block;
+}
+
+@media screen {
+  .btn,
+  .btn .excluded {
+    display: block;
+  }
+}
+/* class-prefixer-enable container */
+
+@media (hover: none), (pointer: coarse) {
+  .btn:is(.btn--small, .btn--large):hover .btn--primary.excluded {
+    display: block;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

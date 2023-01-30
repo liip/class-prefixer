@@ -1,0 +1,67 @@
+/* stylelint-disable selector-max-id, selector-no-qualifying-type, no-duplicate-selectors */
+
+.prefix .prefix-btn {
+  display: block;
+}
+
+.prefix .prefix-btn .prefix-btn--small {
+  display: block;
+}
+
+@media screen {
+  .prefix .prefix-btn {
+    display: block;
+  }
+}
+
+[data-exclude] .prefix-btn {
+  display: block;
+}
+
+/* class-prefixer-disable */
+.btn {
+  display: block;
+}
+
+.btn .btn--small {
+  display: block;
+}
+
+@media screen {
+  .btn {
+    display: block;
+  }
+}
+/* class-prefixer-enable */
+
+/* class-prefixer-disable prefix */
+.prefix .btn {
+  display: block;
+}
+
+.prefix .btn .btn--small {
+  display: block;
+}
+
+@media screen {
+  .prefix .btn {
+    display: block;
+  }
+}
+/* class-prefixer-enable prefix */
+
+/* class-prefixer-disable container */
+.prefix-btn {
+  display: block;
+}
+
+.prefix-btn .prefix-btn--small {
+  display: block;
+}
+
+@media screen {
+  .prefix-btn {
+    display: block;
+  }
+}
+/* class-prefixer-enable container */

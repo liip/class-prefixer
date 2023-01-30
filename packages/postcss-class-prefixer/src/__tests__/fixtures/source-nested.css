@@ -1,0 +1,61 @@
+/* stylelint-disable selector-max-id, selector-no-qualifying-type, no-duplicate-selectors */
+
+.btn {
+  display: block;
+
+  .btn--small {
+    display: block;
+  }
+
+  @media screen {
+    display: block;
+  }
+}
+
+[data-exclude] {
+  .btn {
+    display: block;
+  }
+}
+
+/* class-prefixer-disable */
+.btn {
+  display: block;
+
+  .btn--small {
+    display: block;
+  }
+
+  @media screen {
+    display: block;
+  }
+}
+/* class-prefixer-enable */
+
+/* class-prefixer-disable prefix */
+.btn {
+  display: block;
+
+  .btn--small {
+    display: block;
+  }
+
+  @media screen {
+    display: block;
+  }
+}
+/* class-prefixer-enable prefix */
+
+/* class-prefixer-disable container */
+.btn {
+  display: block;
+
+  .btn--small {
+    display: block;
+  }
+
+  @media screen {
+    display: block;
+  }
+}
+/* class-prefixer-enable container */

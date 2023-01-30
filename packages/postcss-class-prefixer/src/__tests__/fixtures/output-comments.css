@@ -1,0 +1,151 @@
+/* stylelint-disable selector-max-id, selector-no-qualifying-type, no-duplicate-selectors */
+
+:root {
+  --display: block;
+}
+
+html,
+body {
+  display: block;
+}
+
+body .prefix-btn {
+  display: block;
+}
+
+[dir='rtl'] .prefix {
+  display: block;
+}
+
+[dir='rtl'].prefix-btn .prefix .prefix-btn--small {
+  display: block;
+}
+
+[dir='rtl'] .prefix .prefix-btn {
+  display: block;
+}
+
+[data-exclude] .prefix-btn {
+  display: block;
+}
+
+.prefix * {
+  display: block;
+}
+
+.prefix :hover {
+  display: block;
+}
+
+.prefix #btn,
+.prefix #btn.prefix-btn,
+.prefix #btn .prefix-btn,
+.prefix #btn button,
+.prefix #btn button.prefix-btn,
+.prefix #btn button .prefix-btn {
+  display: block;
+}
+
+/* class-prefixer-disable */
+.btn {
+  display: block;
+}
+/* class-prefixer-enable */
+
+/* class-prefixer-disable prefix*/
+.prefix .btn.btn--small {
+  display: block;
+}
+/* class-prefixer-enable prefix */
+
+/* class-prefixer-disable container */
+.prefix-btn .prefix-btn--small {
+  display: block;
+}
+/* class-prefixer-enable container */
+
+/* class-prefixer-disable */
+.btn,
+.btn.btn--small,
+.btn .btn--small,
+.btn > .btn--small,
+.btn + .btn--small {
+  display: block;
+}
+/* class-prefixer-enable */
+
+.prefix .prefix-btn span,
+.prefix .prefix-btn span.prefix-btn--small,
+.prefix .prefix-btn span .prefix-btn--small {
+  display: block;
+}
+
+/* class-prefixer-disable prefix */
+.prefix .btn:hover,
+.prefix .btn:active,
+.prefix .btn:focus {
+  display: block;
+}
+
+.prefix .btn::after,
+.prefix .btn::before {
+  display: block;
+}
+
+.prefix .btn:not(.btn--small),
+.prefix .btn:is(.btn--small, .btn--large),
+.prefix .btn:where(.btn--small, .btn--large) .btn--primary {
+  display: block;
+}
+/* class-prefixer-enable prefix */
+
+.prefix button:not(.prefix-btn--small),
+.prefix button:is(.prefix-btn, .prefix-btn--small),
+.prefix button:where(.prefix-btn, .prefix-btn--small):hover::after {
+  display: block;
+}
+
+.prefix .prefix-btn[data-attr='some-value'] {
+  display: block;
+}
+
+/* class-prefixer-disable container */
+.prefix-btn {
+  display: block;
+}
+
+.excluded,
+.excluded.prefix-btn,
+.excluded .prefix-btn,
+.excluded > .prefix-btn,
+.prefix-btn.reg-exclude,
+.prefix-btn .prefix-is-not-reg-exclude,
+.prefix-btn:not(.excluded),
+.prefix-btn:is(.excluded, .reg-exclude, .prefix-is-not-reg-exclude) .excluded {
+  display: block;
+}
+
+@media screen {
+  .prefix-btn,
+  .prefix-btn .excluded {
+    display: block;
+  }
+}
+/* class-prefixer-enable container */
+
+@media (hover: none), (pointer: coarse) {
+  .prefix
+    .prefix-btn:is(.prefix-btn--small, .prefix-btn--large):hover
+    .prefix-btn--primary.excluded {
+    display: block;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
