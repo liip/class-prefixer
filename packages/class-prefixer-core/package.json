@@ -1,0 +1,20 @@
+{
+  "name": "@liip/class-prefixer-core",
+  "version": "0.0.1",
+  "description": "Core utilities of the class-prefixer tools",
+  "main": "dist/index.js",
+  "author": {
+    "name": "Liip",
+    "url": "https://www.liip.ch/"
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -p ./tsconfig.build.json",
+    "lint": "eslint \"src/**/*.ts\"",
+    "lint:fix": "npm run lint -- --fix",
+    "format": "prettier '**/!(dist)/*.@(ts|json|md)' --check",
+    "format:fix": "npm run format -- --write",
+    "test": "NODE_ENV=test jest",
+    "typecheck": "tsc --noEmit"
+  }
+}
