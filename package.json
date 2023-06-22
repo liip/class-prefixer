@@ -13,7 +13,7 @@
     "format:fix": "lerna run format:fix",
     "test": "lerna run test",
     "typecheck": "lerna run typecheck",
-    "version": "lerna version --create-release gitlab",
+    "version": "lerna version --create-release github",
     "publish": "lerna publish from-git"
   },
   "workspaces": [

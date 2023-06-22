@@ -1,4 +1,15 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
-  "version": "independent"
+  "version": "independent",
+  "changelogPreset": "angular",
+  "command": {
+    "version": {
+      "allowBranch": "main",
+      "conventionalCommits": true,
+      "message": "chore: publish new version"
+    },
+    "publish": {
+      "registry": "https://registry.npmjs.org/"
+    }
+  }
 }

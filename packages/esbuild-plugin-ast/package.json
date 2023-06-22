@@ -3,12 +3,13 @@
   "version": "0.0.1",
   "description": "Esbuild plugin to parse JavaScript AST",
   "main": "dist/plugin.js",
+  "files": [
+    "/dist"
+  ],
   "keywords": [
-    "css",
-    "prefix",
-    "class",
     "esbuild",
-    "plugin"
+    "plugin",
+    "ast"
   ],
   "author": {
     "name": "Liip",
