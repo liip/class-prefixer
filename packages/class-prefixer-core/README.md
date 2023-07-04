@@ -33,9 +33,11 @@ type TestConditions = (string | RegExp)[];
 ```
 
 **`value`**
+
 Define the actual string used to prefix classes
 
 **`excludes`**
+
 Strings or regular expressions to exclude certain classes from the transformation.
 
 ### container

@@ -1,6 +1,6 @@
 # class-prefixer-ast-visitor
 
-Ready to use `ESTraverse.Visitor` implementation to prefix classes and `css` selectors. Those implementation can be use along (esbuild-plugin-ast)[] and (esbuild-plugin-ast-vue)[] plugins.
+Ready to use `ESTraverse.Visitor` implementation to prefix classes and `css` selectors. Those implementation can be use along [esbuild-plugin-ast](https://github.com/liip/class-prefixer/tree/main/packages/esbuild-plugin-ast) and [esbuild-plugin-ast-vue](https://github.com/liip/class-prefixer/tree/main/packages/esbuild-plugin-ast-vue) plugins.
 
 ## createVisitor
 
@@ -52,9 +52,11 @@ type TestConditions = (string | RegExp)[];
 ```
 
 **`value`**
+
 Define the actual string used to prefix classes
 
 **`excludes`**
+
 Strings or regular expressions to exclude certain classes from the transformation.
 
 ### container
