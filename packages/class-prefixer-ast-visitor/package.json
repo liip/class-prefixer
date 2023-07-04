@@ -3,12 +3,16 @@
   "version": "0.0.1",
   "description": "AST visitor implementation to prefix CSS class names",
   "main": "dist/index.js",
+  "files": [
+    "/dist"
+  ],
   "keywords": [
+    "ast",
+    "visitor",
     "css",
-    "prefix",
     "class",
-    "esbuild",
-    "plugin"
+    "selector",
+    "prefix"
   ],
   "author": {
     "name": "Liip",

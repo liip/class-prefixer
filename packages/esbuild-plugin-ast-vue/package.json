@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "Esbuild plugin to parse Vue AST",
   "main": "dist/plugin.js",
+  "files": [
+    "/dist"
+  ],
   "keywords": [
     "esbuild",
     "plugin",

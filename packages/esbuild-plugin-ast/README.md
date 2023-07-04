@@ -1,6 +1,6 @@
 # esbuild-plugin-ast
 
-A plugin to generate an AST representation of your `.js` files. The plugin use (Acorn)[https://github.com/acornjs/acorn] to produce an `estree` compliant `AST` object. You can then apply transformations by providing a `visitor` object.
+A plugin to generate an AST representation of your `.js` files. The plugin use [Acorn](https://github.com/acornjs/acorn) to produce an `estree` compliant `AST` object. You can then apply transformations by providing a `visitor` object.
 
 ## Installation
 
@@ -42,4 +42,4 @@ An array of node module dependencies on which this plugin should also operate.
 
 ### visitor
 
-An `ESTraverse.Visitor` object used to apply AST transformation. Check the (Estraverse documentation)[https://github.com/estools/estraverse] form more information on the available API.
+An `ESTraverse.Visitor` object used to apply AST transformation. Check the [Estraverse documentation](https://github.com/estools/estraverse) form more information on the available API.

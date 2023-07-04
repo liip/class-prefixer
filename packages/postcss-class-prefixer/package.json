@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "PostCSS plugin to automatically prefix and contain CSS class names",
   "main": "dist/plugin.js",
+  "files": [
+    "/dist"
+  ],
   "keywords": [
     "css",
     "prefix",

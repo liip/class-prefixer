@@ -140,9 +140,11 @@ type TestConditions = (string | RegExp)[];
 ```
 
 **`value`**
+
 Define the actual string used to prefix classes
 
 **`excludes`**
+
 Strings or regular expressions to exclude certain classes from the transformation.
 
 ### container
@@ -172,10 +174,13 @@ type TestConditions = (string | RegExp)[];
 ```
 
 **`value`**
+
 Define the actual string used to containerize classes
 
 **`excludes`**
+
 An object of node types keys containing strings or regular expressions to exclude certain elements from containerization
 
 **`preserveRoots`**
+
 An object of node types keys containing strings or regular expressions specifying which elements should be kept at the root of the selector

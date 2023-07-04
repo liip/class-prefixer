@@ -3,6 +3,15 @@
   "version": "0.0.1",
   "description": "Core utilities of the class-prefixer tools",
   "main": "dist/index.js",
+  "files": [
+    "/dist"
+  ],
+  "keywords": [
+    "css",
+    "class",
+    "selector",
+    "prefix"
+  ],
   "author": {
     "name": "Liip",
     "url": "https://www.liip.ch/"
