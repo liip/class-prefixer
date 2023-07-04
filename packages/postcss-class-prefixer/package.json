@@ -1,11 +1,7 @@
 {
   "name": "@liip/postcss-class-prefixer",
-  "version": "0.0.1",
+  "version": "0.1.0-alpha.0",
   "description": "PostCSS plugin to automatically prefix and contain CSS class names",
-  "main": "dist/plugin.js",
-  "files": [
-    "/dist"
-  ],
   "keywords": [
     "css",
     "prefix",
@@ -17,6 +13,19 @@
     "name": "Liip",
     "url": "https://www.liip.ch/"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/liip/class-prefixer.git",
+    "directory": "packages/postcss-class-prefixer"
+  },
+  "publishConfig": {
+    "@liip:registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "main": "dist/plugin.js",
+  "files": [
+    "/dist"
+  ],
   "license": "MIT",
   "scripts": {
     "dev": "tsc -w -p ./tsconfig.build.json",
@@ -36,7 +45,7 @@
     "postcss-nested": "^6.0.1"
   },
   "dependencies": {
-    "@liip/class-prefixer-core": "^0.0.1",
+    "@liip/class-prefixer-core": "^0.1.0-alpha.0",
     "css-selector-tokenizer": "^0.8.0"
   },
   "peerDependencies": {

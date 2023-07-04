@@ -3,6 +3,14 @@
   "version": "0.0.1",
   "description": "A suite of tools to automatically prefix and contain CSS class names in a variety of file type",
   "private": true,
+  "author": {
+    "name": "Liip",
+    "url": "https://www.liip.ch/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/liip/class-prefixer.git"
+  },
   "scripts": {
     "postinstall": "npm run build",
     "dev": "lerna run dev",

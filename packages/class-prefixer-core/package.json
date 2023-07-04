@@ -1,11 +1,7 @@
 {
   "name": "@liip/class-prefixer-core",
-  "version": "0.0.1",
+  "version": "0.1.0-alpha.0",
   "description": "Core utilities of the class-prefixer tools",
-  "main": "dist/index.js",
-  "files": [
-    "/dist"
-  ],
   "keywords": [
     "css",
     "class",
@@ -16,6 +12,19 @@
     "name": "Liip",
     "url": "https://www.liip.ch/"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/liip/class-prefixer.git",
+    "directory": "packages/class-prefixer-core"
+  },
+  "publishConfig": {
+    "@liip:registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "main": "dist/index.js",
+  "files": [
+    "/dist"
+  ],
   "license": "MIT",
   "scripts": {
     "dev": "tsc -w -p ./tsconfig.build.json",

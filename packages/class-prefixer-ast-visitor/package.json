@@ -1,11 +1,7 @@
 {
   "name": "@liip/class-prefixer-ast-visitor",
-  "version": "0.0.1",
+  "version": "0.1.0-alpha.0",
   "description": "AST visitor implementation to prefix CSS class names",
-  "main": "dist/index.js",
-  "files": [
-    "/dist"
-  ],
   "keywords": [
     "ast",
     "visitor",
@@ -18,6 +14,19 @@
     "name": "Liip",
     "url": "https://www.liip.ch/"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/liip/class-prefixer.git",
+    "directory": "packages/class-prefixer-ast-visitor"
+  },
+  "publishConfig": {
+    "@liip:registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "main": "dist/index.js",
+  "files": [
+    "/dist"
+  ],
   "license": "MIT",
   "scripts": {
     "dev": "tsc -w -p ./tsconfig.build.json",
@@ -30,7 +39,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@liip/class-prefixer-core": "^0.0.1"
+    "@liip/class-prefixer-core": "^0.1.0-alpha.0"
   },
   "devDependencies": {
     "@types/estree": "^1.0.1",
