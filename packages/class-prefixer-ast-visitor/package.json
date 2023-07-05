@@ -1,6 +1,6 @@
 {
   "name": "@liip/class-prefixer-ast-visitor",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0",
   "description": "AST visitor implementation to prefix CSS class names",
   "keywords": [
     "ast",
@@ -39,7 +39,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@liip/class-prefixer-core": "^0.1.0-alpha.0"
+    "@liip/class-prefixer-core": "^0.1.0"
   },
   "devDependencies": {
     "@types/estree": "^1.0.1",

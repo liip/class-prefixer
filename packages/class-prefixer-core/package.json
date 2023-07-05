@@ -1,6 +1,6 @@
 {
   "name": "@liip/class-prefixer-core",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0",
   "description": "Core utilities of the class-prefixer tools",
   "keywords": [
     "css",
