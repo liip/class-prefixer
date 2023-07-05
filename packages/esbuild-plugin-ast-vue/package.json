@@ -48,6 +48,6 @@
     "hash-sum": "^2.0.0"
   },
   "peerDependencies": {
-    "esbuild": ">= 0.18"
+    "esbuild": "0.18.x"
   }
 }
