@@ -1,6 +1,6 @@
 {
   "name": "@liip/postcss-class-prefixer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "PostCSS plugin to automatically prefix and contain CSS class names",
   "keywords": [
     "css",
