@@ -15,6 +15,8 @@ import { resolveStyle } from './style';
 import { resolveTemplate } from './template';
 import { resolvePath, validateDependency } from './utils';
 
+type ExtractNonArray<T> = T extends Array<any> ? never : T;
+
 export interface AstParserVueOptions extends AstParserOptions {
   templateOptions?: Pick<
     SFCTemplateCompileOptions,
@@ -33,7 +35,7 @@ export interface AstParserVueOptions extends AstParserOptions {
     | 'postcssOptions'
     | 'postcssPlugins'
   >;
-  templateVisitor: AstParserOptions['visitor'];
+  templateVisitor: ExtractNonArray<AstParserOptions['visitors']>;
 }
 
 validateDependency();
@@ -42,7 +44,7 @@ export function astParserVue({
   templateOptions,
   scriptOptions,
   styleOptions,
-  visitor,
+  visitors,
   templateVisitor,
 }: AstParserVueOptions): Plugin {
   return {
@@ -88,7 +90,7 @@ export function astParserVue({
         });
 
         return {
-          contents: parser(code, visitor),
+          contents: parser(code, visitors),
           errors: error,
           resolveDir: dirname,
           loader: isTs ? 'ts' : 'js',

@@ -9,10 +9,13 @@ import type { Plugin, OnResolveArgs } from 'esbuild';
 
 export interface AstParserOptions {
   dependencies?: string[];
-  visitor: Visitor;
+  visitors: Visitor | Visitor[];
 }
 
-export function astParser({ dependencies, visitor }: AstParserOptions): Plugin {
+export function astParser({
+  dependencies,
+  visitors,
+}: AstParserOptions): Plugin {
   return {
     name: 'astParser',
     setup(build) {
@@ -112,7 +115,7 @@ export function astParser({ dependencies, visitor }: AstParserOptions): Plugin {
         const source = await readFile(args.path, 'utf-8');
 
         return {
-          contents: parser(source, visitor),
+          contents: parser(source, visitors),
         };
       });
     },

@@ -16,8 +16,8 @@ const isFunction = (v: unknown) =>
  * Create an AST representation of the provided source and use the
  * visitor object to transform it if provided
  */
-export function parser(source: string, visitor: Visitor) {
-  if (!visitor) {
+export function parser(source: string, visitors: Visitor | Visitor[]) {
+  if (!visitors) {
     /* eslint-disable-next-line no-console */
     console.warn(
       '[esbuildPluginAst]: No visitor provided, the plugin will have no effect.',
@@ -25,16 +25,20 @@ export function parser(source: string, visitor: Visitor) {
     return source;
   }
 
-  if (!isFunction(visitor.enter) && !isFunction(visitor.leave)) {
-    return source;
-  }
+  const visitorArray = Array.isArray(visitors) ? visitors : [visitors];
 
-  const ast = Parser.parse(source, {
+  let ast = Parser.parse(source, {
     ecmaVersion: 'latest',
     sourceType: 'module',
   }) as Node;
 
-  const newAst = replace(ast, visitor);
+  for (const visitor of visitorArray) {
+    if (!isFunction(visitor.enter) && !isFunction(visitor.leave)) {
+      continue;
+    }
 
-  return generate(newAst);
+    ast = replace(ast, visitor);
+  }
+
+  return generate(ast);
 }

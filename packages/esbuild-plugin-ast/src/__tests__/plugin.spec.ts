@@ -12,7 +12,7 @@ describe('astParser', () => {
   const virtualPackage = 'ast-plugin';
 
   const pluginOptions: AstParserOptions = {
-    visitor: {
+    visitors: {
       enter(node) {
         if (
           node.type === 'CallExpression' &&
