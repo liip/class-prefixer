@@ -17,6 +17,9 @@ export function astParser({ dependencies, visitor }: AstParserOptions): Plugin {
     name: 'astParser',
     setup(build) {
       const namespace = 'ast-parser';
+      const excludeFileTypes = Object.keys(
+        build.initialOptions.loader || {},
+      ).map((key) => key.slice(1));
 
       /**
        * Use the entry points as starting point for the plugin
@@ -40,6 +43,15 @@ export function astParser({ dependencies, visitor }: AstParserOptions): Plugin {
           kind: 'import-statement',
           resolveDir: dirname(args.importer),
         });
+
+        const fileType = result.path.split('.').pop();
+
+        if (fileType && excludeFileTypes.includes(fileType)) {
+          return {
+            path: result.path,
+            namespace: 'file',
+          };
+        }
 
         return {
           path: result.path,

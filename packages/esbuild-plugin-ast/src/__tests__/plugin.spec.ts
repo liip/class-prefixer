@@ -31,6 +31,7 @@ describe('astParser', () => {
     format: 'esm',
     minify: false,
     write: false,
+    loader: { '.json': 'json' },
     plugins: [astParser(pluginOptions)],
   };
 
@@ -87,6 +88,37 @@ describe('astParser', () => {
       );
       expect((result.outputFiles as OutputFile[])[0].text).toEqual(
         expect.not.stringContaining(placeholder),
+      );
+    });
+  });
+
+  describe('Other file types', () => {
+    beforeAll(() => {
+      entryPoint = join(tmpDir, `/packages/${virtualPackage}/index.js`);
+      testFilePath = `./packages/${virtualPackage}/test-case.json`;
+      testFile = join(tmpDir, testFilePath);
+    });
+
+    beforeEach(async () => {
+      await writeFile(
+        entryPoint,
+        `import testCase from './test-case.json';\ntestCase.${argument};`,
+      );
+
+      ctx = await context({
+        ...esbuildConfig,
+        entryPoints: { index: entryPoint },
+      });
+    });
+
+    it('should not parse and transform file types explicitly handled by other loaders', async () => {
+      const testCase = `{ "${argument}": "value" }`;
+      await writeFile(testFile, testCase);
+
+      const result = await ctx.rebuild();
+
+      expect((result.outputFiles as OutputFile[])[0].text).toEqual(
+        expect.stringContaining('value'),
       );
     });
   });
