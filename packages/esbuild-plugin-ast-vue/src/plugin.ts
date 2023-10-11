@@ -90,7 +90,7 @@ export function astParserVue({
         });
 
         return {
-          contents: parser(code, visitors),
+          contents: parser(code, [visitors, templateVisitor].flat()),
           errors: error,
           resolveDir: dirname,
           loader: isTs ? 'ts' : 'js',

@@ -12,7 +12,7 @@ describe('astPluginVue', () => {
   const virtualPackage = 'ast-plugin-vue';
 
   const pluginOptions: AstParserVueOptions = {
-    visitor: {
+    visitors: {
       enter(node) {
         if (
           node.type === 'CallExpression' &&
@@ -29,7 +29,7 @@ describe('astPluginVue', () => {
         if (
           node.type === 'Property' &&
           node.key.type === 'Identifier' &&
-          ['staticClass', 'class'].includes(node.key.name)
+          node.key.name === 'class'
         ) {
           return {
             ...node,
