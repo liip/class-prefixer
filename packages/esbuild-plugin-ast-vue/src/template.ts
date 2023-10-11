@@ -7,6 +7,7 @@ import { fromObject } from 'convert-source-map';
 import { PartialMessage } from 'esbuild';
 
 import { getDescriptorCache, getId } from './cache';
+import { scriptCache } from './script';
 
 import type { AstParserVueOptions } from './plugin';
 
@@ -20,10 +21,14 @@ export function resolveTemplate({
   isProd: boolean;
 }) {
   const descriptor = getDescriptorCache(filename);
+  const scopeId = getId(filename);
 
-  let { code, errors, map } = compileTemplate(
-    getTemplateOptions({ descriptor, options, isProd }),
-  );
+  let { code, errors, map } = compileTemplate({
+    ...getTemplateOptions({ descriptor, options, isProd, scopeId }),
+    id: scopeId,
+    source: descriptor.template?.content || '',
+    filename: descriptor.filename,
+  });
 
   if (map) {
     code += fromObject(map).toComment();
@@ -51,27 +56,33 @@ export function getTemplateOptions({
   descriptor,
   options,
   isProd,
+  scopeId,
 }: {
   descriptor: SFCDescriptor;
   options: AstParserVueOptions['templateOptions'];
   isProd: boolean;
-}): SFCTemplateCompileOptions {
-  const filename = descriptor.filename;
-  const scopeId = getId(filename);
+  scopeId: string;
+}): Omit<SFCTemplateCompileOptions, 'source'> | undefined {
+  const block = descriptor.template;
+
+  if (!block) {
+    return;
+  }
+
+  const hasScoped = descriptor.styles.some((s) => s.scoped);
+  const resolvedScript = scriptCache.get(descriptor);
 
   return {
-    source: descriptor.template?.content || '',
-    filename,
     id: scopeId,
-    scoped: descriptor.styles.some((s) => s.scoped),
+    scoped: hasScoped,
     isProd,
-    inMap: descriptor.template?.map,
+    filename: descriptor.filename,
+    inMap: block.src ? undefined : block.map,
     compiler: options?.compiler,
-    preprocessLang: options?.preprocessLang,
-    preprocessOptions: options?.preprocessOptions,
     compilerOptions: {
       ...options?.compilerOptions,
       scopeId,
+      bindingMetadata: resolvedScript ? resolvedScript.bindings : undefined,
     },
     transformAssetUrls: options?.transformAssetUrls,
   };

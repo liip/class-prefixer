@@ -14,7 +14,14 @@ export function parseClassArguments<N extends Node>(
   node: N,
   options?: PrefixerOptions,
 ): N {
-  if (node.type === 'ArrayExpression' && node.elements) {
+  if (node.type === 'CallExpression' && node.arguments) {
+    return {
+      ...node,
+      arguments: node.arguments.map(
+        (argument) => argument && parseClassArguments(argument, options),
+      ),
+    };
+  } else if (node.type === 'ArrayExpression' && node.elements) {
     return {
       ...node,
       elements: node.elements.map(

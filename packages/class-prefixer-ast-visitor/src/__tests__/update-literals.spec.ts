@@ -1,3 +1,5 @@
+import { Prefixer } from '@liip/class-prefixer-core';
+
 import { updateLiterals } from '../update-literals';
 
 import type { Literal, TemplateLiteral } from 'estree';
@@ -23,7 +25,7 @@ describe('parseSelectorArguments', () => {
 
     const options = { prefix };
 
-    updateLiterals(originalNode, prefixer, options);
+    updateLiterals(originalNode, prefixer as Prefixer, options);
 
     expect(prefixer).toHaveBeenCalledWith(originalNode.value, options);
   });
@@ -48,7 +50,7 @@ describe('parseSelectorArguments', () => {
 
     const options = { prefix };
 
-    updateLiterals(originalNode, prefixer, options);
+    updateLiterals(originalNode, prefixer as Prefixer, options);
 
     expect(prefixer).toHaveBeenNthCalledWith(
       1,

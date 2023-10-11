@@ -12,7 +12,7 @@ export const createVueTemplateVisitor = (config: PrefixerOptions): Visitor => ({
     if (
       node.type === 'Property' &&
       node.key.type === 'Identifier' &&
-      ['staticClass', 'class'].includes(node.key.name)
+      node.key.name === 'class'
     ) {
       return {
         ...node,

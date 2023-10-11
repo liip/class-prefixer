@@ -9,14 +9,20 @@ import type { Plugin, OnResolveArgs } from 'esbuild';
 
 export interface AstParserOptions {
   dependencies?: string[];
-  visitor: Visitor;
+  visitors: Visitor | Visitor[];
 }
 
-export function astParser({ dependencies, visitor }: AstParserOptions): Plugin {
+export function astParser({
+  dependencies,
+  visitors,
+}: AstParserOptions): Plugin {
   return {
     name: 'astParser',
     setup(build) {
       const namespace = 'ast-parser';
+      const excludeFileTypes = Object.keys(
+        build.initialOptions.loader || {},
+      ).map((key) => key.slice(1));
 
       /**
        * Use the entry points as starting point for the plugin
@@ -40,6 +46,15 @@ export function astParser({ dependencies, visitor }: AstParserOptions): Plugin {
           kind: 'import-statement',
           resolveDir: dirname(args.importer),
         });
+
+        const fileType = result.path.split('.').pop();
+
+        if (fileType && excludeFileTypes.includes(fileType)) {
+          return {
+            path: result.path,
+            namespace: 'file',
+          };
+        }
 
         return {
           path: result.path,
@@ -100,7 +115,7 @@ export function astParser({ dependencies, visitor }: AstParserOptions): Plugin {
         const source = await readFile(args.path, 'utf-8');
 
         return {
-          contents: parser(source, visitor),
+          contents: parser(source, visitors),
         };
       });
     },

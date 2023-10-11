@@ -5,6 +5,7 @@ import type {
   TemplateLiteral,
   ObjectExpression,
   ArrayExpression,
+  CallExpression,
 } from 'estree';
 
 describe('parseClassArguments', () => {
@@ -258,6 +259,127 @@ describe('parseClassArguments', () => {
       ],
     };
 
+    const result = parseClassArguments(originalNode, { prefix });
+
+    expect(result).toEqual(expectedNode);
+  });
+
+  it('should handle CallExpression node and update required value', () => {
+    const originalNode: CallExpression = {
+      type: 'CallExpression',
+      optional: false,
+      callee: {
+        type: 'Identifier',
+        name: 'calleeName',
+      },
+      arguments: [
+        {
+          type: 'ArrayExpression',
+          elements: [
+            {
+              type: 'Literal',
+              value: 'value second-value',
+              raw: "'value second-value'",
+            },
+            {
+              type: 'ObjectExpression',
+              properties: [
+                {
+                  type: 'Property',
+                  key: {
+                    type: 'Literal',
+                    value: 'third-value',
+                    raw: "'third-value'",
+                  },
+                  value: {
+                    type: 'MemberExpression',
+                    object: { type: 'ThisExpression' },
+                    property: {
+                      type: 'Identifier',
+                      name: 'actionable',
+                    },
+                    computed: false,
+                    optional: false,
+                  },
+                  kind: 'init',
+                  method: false,
+                  shorthand: false,
+                  computed: false,
+                },
+              ],
+            },
+            {
+              type: 'MemberExpression',
+              object: { type: 'ThisExpression' },
+              property: {
+                type: 'Identifier',
+                name: 'rootClass',
+              },
+              computed: false,
+              optional: false,
+            },
+          ],
+        },
+      ],
+    };
+
+    const expectedNode: CallExpression = {
+      type: 'CallExpression',
+      optional: false,
+      callee: {
+        type: 'Identifier',
+        name: 'calleeName',
+      },
+      arguments: [
+        {
+          type: 'ArrayExpression',
+          elements: [
+            {
+              type: 'Literal',
+              value: `${prefix.value}value ${prefix.value}second-value`,
+              raw: `'${prefix.value}value ${prefix.value}second-value'`,
+            },
+            {
+              type: 'ObjectExpression',
+              properties: [
+                {
+                  type: 'Property',
+                  key: {
+                    type: 'Literal',
+                    value: `${prefix.value}third-value`,
+                    raw: `'${prefix.value}third-value'`,
+                  },
+                  value: {
+                    type: 'MemberExpression',
+                    object: { type: 'ThisExpression' },
+                    property: {
+                      type: 'Identifier',
+                      name: 'actionable',
+                    },
+                    computed: false,
+                    optional: false,
+                  },
+                  kind: 'init',
+                  method: false,
+                  shorthand: false,
+                  computed: false,
+                },
+              ],
+            },
+            {
+              type: 'MemberExpression',
+              object: { type: 'ThisExpression' },
+              property: {
+                type: 'Identifier',
+                name: 'rootClass',
+              },
+              computed: false,
+              optional: false,
+            },
+          ],
+        },
+      ],
+    };
     const result = parseClassArguments(originalNode, { prefix });
 
     expect(result).toEqual(expectedNode);

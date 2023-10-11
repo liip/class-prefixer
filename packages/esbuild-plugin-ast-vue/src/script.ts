@@ -1,4 +1,8 @@
-import { compileScript } from '@vue/compiler-sfc';
+import {
+  SFCDescriptor,
+  SFCScriptBlock,
+  compileScript,
+} from '@vue/compiler-sfc';
 import { fromObject } from 'convert-source-map';
 import { PartialMessage } from 'esbuild';
 
@@ -6,6 +10,8 @@ import { getDescriptorCache, getId } from './cache';
 import { getTemplateOptions } from './template';
 
 import type { AstParserVueOptions } from './plugin';
+
+export const scriptCache = new WeakMap<SFCDescriptor, SFCScriptBlock | null>();
 
 export function resolveScript({
   filename,
@@ -21,6 +27,17 @@ export function resolveScript({
   sourcemap: boolean;
 }) {
   const descriptor = getDescriptorCache(filename);
+
+  const cached = scriptCache.get(descriptor);
+
+  if (cached) {
+    return {
+      code: cached.content,
+      isTs: cached.lang === 'ts',
+      error: [],
+    };
+  }
+
   const error: PartialMessage[] = [];
   const { script, scriptSetup } = descriptor;
   const isTs =
@@ -43,14 +60,22 @@ export function resolveScript({
       inlineTemplate: true,
       babelParserPlugins: scriptOptions.babelParserPlugins,
       templateOptions: descriptor.template
-        ? getTemplateOptions({ descriptor, options: templateOptions, isProd })
+        ? getTemplateOptions({
+            descriptor,
+            options: templateOptions,
+            isProd,
+            scopeId,
+          })
         : {},
     });
 
     code = res.content;
+
     if (res.map) {
       code += fromObject(res.map).toComment();
     }
+
+    scriptCache.set(descriptor, res);
   } catch (e: any) {
     error.push({
       text: e.message,

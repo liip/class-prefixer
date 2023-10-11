@@ -1,7 +1,14 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "noEmit": true
+    "noEmit": true,
+    "types": [
+      "@liip/class-prefixer-ast-visitor",
+      "@liip/class-prefixer-core",
+      "@liip/esbuild-plugin-ast",
+      "@liip/esbuild-plugin-ast-vue",
+      "@liip/postcss-class-prefixer"
+    ]
   },
   "include": ["."]
 }
