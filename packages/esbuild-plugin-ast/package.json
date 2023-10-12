@@ -1,6 +1,6 @@
 {
   "name": "@liip/esbuild-plugin-ast",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Esbuild plugin to parse JavaScript AST",
   "keywords": [
     "esbuild",
@@ -36,7 +36,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@liip/class-prefixer-core": "^0.1.0",
+    "@liip/class-prefixer-core": "^0.2.0",
     "acorn": "^8.10.0",
     "astring": "^1.8.6",
     "estraverse": "^5.3.0"

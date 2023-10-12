@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/liip/class-prefixer/compare/@liip/postcss-class-prefixer@0.1.1...@liip/postcss-class-prefixer@0.2.0) (2023-10-12)
+
+### Bug Fixes
+
+- **postcss:** Remove typing error ([6668332](https://github.com/liip/class-prefixer/commit/66683324ff31682ac1f4db76d3c1817f31698738))
+
+### chore
+
+- Update dependencies ([159adde](https://github.com/liip/class-prefixer/commit/159adde0896c8ae292e18b4c9e97e300c58b0535))
+
+### BREAKING CHANGES
+
+- Update esbuild peer dependenciy on 0.19.x
+
 ## [0.1.1](https://github.com/liip/class-prefixer/compare/@liip/postcss-class-prefixer@0.1.0...@liip/postcss-class-prefixer@0.1.1) (2023-07-05)
 
 ### Bug Fixes
