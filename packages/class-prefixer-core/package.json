@@ -37,7 +37,7 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@types/css-selector-tokenizer": "^0.7.1"
+    "@types/css-selector-tokenizer": "^0.7.2"
   },
   "dependencies": {
     "css-selector-tokenizer": "^0.8.0"
