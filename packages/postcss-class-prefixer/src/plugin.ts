@@ -9,8 +9,6 @@ import { Plugin, Node, AnyNode, AtRule, Rule } from 'postcss';
 
 type Directive = 'container' | 'prefix';
 
-type MayBeDirective = Directive | string;
-
 type ActiveDirectives = Directive[];
 
 type NodeTypeTests<T extends { type: string }, P extends string> = Extract<
@@ -324,9 +322,9 @@ const createDirectiveUpdater =
     return setPluginMeta(node, meta) ? undefined : false;
   };
 
-function isDirective<T extends MayBeDirective, MayBeDirective>(
+function isDirective<T extends Directive>(
   defaultDirectives: ReadonlyArray<T>,
-  mayBeDirective: MayBeDirective,
+  mayBeDirective: string,
 ): mayBeDirective is T {
   return defaultDirectives.includes(mayBeDirective as T);
 }
@@ -345,7 +343,7 @@ export = (options: PrefixerOptions): Plugin => ({
     const disableMatches = disableCommentRegex.exec(comment.text);
 
     if (disableMatches !== null) {
-      const [_, directive] = [...disableMatches] as [string, MayBeDirective];
+      const [_, directive] = [...disableMatches];
 
       let disableDirectives: ActiveDirectives;
 
