@@ -1,6 +1,6 @@
 {
   "name": "@liip/esbuild-plugin-ast",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Esbuild plugin to parse JavaScript AST",
   "keywords": [
     "esbuild",

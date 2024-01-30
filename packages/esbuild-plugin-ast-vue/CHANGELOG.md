@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1](https://github.com/liip/class-prefixer/compare/@liip/esbuild-plugin-ast-vue@0.3.0...@liip/esbuild-plugin-ast-vue@0.3.1) (2024-01-30)
+
+### Bug Fixes
+
+- **ast-vue:** Handle js script deps via esbuild-plugin-ast ([a04e0e9](https://github.com/liip/class-prefixer/commit/a04e0e971761c567e5e184951c3515985d212067))
+
 # [0.3.0](https://github.com/liip/class-prefixer/compare/@liip/esbuild-plugin-ast-vue@0.2.0...@liip/esbuild-plugin-ast-vue@0.3.0) (2023-10-12)
 
 ### chore
