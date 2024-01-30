@@ -10,16 +10,17 @@ import type { Plugin, OnResolveArgs } from 'esbuild';
 export interface AstParserOptions {
   dependencies?: string[];
   visitors: Visitor | Visitor[];
+  namespace?: string;
 }
 
 export function astParser({
   dependencies,
   visitors,
+  namespace = 'ast-parser',
 }: AstParserOptions): Plugin {
   return {
     name: 'astParser',
     setup(build) {
-      const namespace = 'ast-parser';
       const excludeFileTypes = Object.keys(
         build.initialOptions.loader || {},
       ).map((key) => key.slice(1));
@@ -109,7 +110,7 @@ export function astParser({
 
       /**
        * Load, parse and modify any other imports that was placed in
-       * the `phx-class-prefixer` namespace
+       * the `ast-parser` namespace
        */
       build.onLoad({ filter: /.*/, namespace }, async (args) => {
         const source = await readFile(args.path, 'utf-8');

@@ -17,7 +17,8 @@ import { resolvePath, validateDependency } from './utils';
 
 type ExtractNonArray<T> = T extends Array<any> ? never : T;
 
-export interface AstParserVueOptions extends AstParserOptions {
+export interface AstParserVueOptions
+  extends Omit<AstParserOptions, 'namespace'> {
   templateOptions?: Pick<
     SFCTemplateCompileOptions,
     | 'compiler'
@@ -36,7 +37,10 @@ export interface AstParserVueOptions extends AstParserOptions {
     | 'postcssPlugins'
   >;
   templateVisitor: ExtractNonArray<AstParserOptions['visitors']>;
+  scriptNamespace?: string;
 }
+
+type ScriptResolvedReturn = { path: string; namespace?: string };
 
 validateDependency();
 
@@ -46,6 +50,7 @@ export function astParserVue({
   styleOptions,
   visitors,
   templateVisitor,
+  scriptNamespace,
 }: AstParserVueOptions): Plugin {
   return {
     name: 'astParserVue',
@@ -73,9 +78,15 @@ export function astParserVue({
        * them in a specific namespace
        */
       build.onResolve({ filter: /\.vue\?type=script/ }, (args) => {
-        return {
+        const resolved: ScriptResolvedReturn = {
           path: args.path,
         };
+
+        if (scriptNamespace) {
+          resolved.namespace = scriptNamespace;
+        }
+
+        return resolved;
       });
 
       build.onLoad({ filter: /\.vue\?type=script/ }, (args) => {

@@ -2,6 +2,7 @@ import { mkdtemp, writeFile, rm, mkdir } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
+import { astParser, AstParserOptions } from '@liip/esbuild-plugin-ast';
 import { context, BuildContext, BuildOptions, OutputFile } from 'esbuild';
 
 import { astParserVue, AstParserVueOptions } from '../plugin';
@@ -10,20 +11,23 @@ describe('astPluginVue', () => {
   const placeholder = 'astPluginVue';
   const argument = 'ast-plugin-vue';
   const virtualPackage = 'ast-plugin-vue';
+  const namespace = 'ast-parser-vue';
 
-  const pluginOptions: AstParserVueOptions = {
-    visitors: {
-      enter(node) {
-        if (
-          node.type === 'CallExpression' &&
-          node.callee.type === 'Identifier' &&
-          node.callee.name === placeholder
-        ) {
-          return node.arguments[0];
-        }
-        return node;
-      },
+  const visitors: AstParserOptions['visitors'] = {
+    enter(node) {
+      if (
+        node.type === 'CallExpression' &&
+        node.callee.type === 'Identifier' &&
+        node.callee.name === placeholder
+      ) {
+        return node.arguments[0];
+      }
+      return node;
     },
+  };
+
+  const vuePluginOptions: AstParserVueOptions = {
+    visitors,
     templateVisitor: {
       enter(node) {
         if (
@@ -50,7 +54,6 @@ describe('astPluginVue', () => {
     minify: false,
     write: false,
     external: ['vue'],
-    plugins: [astParserVue(pluginOptions)],
   };
 
   let tmpDir: string;
@@ -76,12 +79,6 @@ describe('astPluginVue', () => {
       entryPoint,
       `import testCase from './test-case.vue';\ntestCase();`,
     );
-
-    ctx = await context({
-      ...esbuildConfig,
-      entryPoints: { index: entryPoint },
-      minify: true,
-    });
   });
 
   afterEach(async () => {
@@ -93,49 +90,103 @@ describe('astPluginVue', () => {
     await rm(tmpDir, { recursive: true, force: true });
   });
 
-  describe('Script section', () => {
-    it('should correctly handle Vue dependencies containing astPlugin placeholder', async () => {
-      const testCase = `<script>export default { computed: { className() { return ${placeholder}('${argument}')}} }</script>`;
-      await writeFile(testFile, testCase);
-
-      const result = await ctx.rebuild();
-
-      expect((result.outputFiles as OutputFile[])[0].text).toEqual(
-        expect.stringContaining(argument),
-      );
-      expect((result.outputFiles as OutputFile[])[0].text).toEqual(
-        expect.not.stringContaining(placeholder),
-      );
+  describe('Standalone usage', () => {
+    beforeEach(async () => {
+      ctx = await context({
+        ...esbuildConfig,
+        plugins: [astParserVue(vuePluginOptions)],
+        entryPoints: { index: entryPoint },
+        minify: true,
+      });
     });
 
-    it('should correctly handle Vue dependencies containing astPlugin placeholder in script setup', async () => {
-      const testCase = `<script setup>import { ref } from 'vue'; const arg = ref(${placeholder}('${argument}'));</script>`;
-      await writeFile(testFile, testCase);
+    describe('Script section', () => {
+      it('should correctly handle Vue dependencies containing astPlugin placeholder', async () => {
+        const testCase = `<script>export default { computed: { className() { return ${placeholder}('${argument}')}} }</script>`;
+        await writeFile(testFile, testCase);
 
-      const result = await ctx.rebuild();
+        const result = await ctx.rebuild();
 
-      expect((result.outputFiles as OutputFile[])[0].text).toEqual(
-        expect.stringContaining(argument),
-      );
-      expect((result.outputFiles as OutputFile[])[0].text).toEqual(
-        expect.not.stringContaining(placeholder),
-      );
+        expect((result.outputFiles as OutputFile[])[0].text).toEqual(
+          expect.stringContaining(argument),
+        );
+        expect((result.outputFiles as OutputFile[])[0].text).toEqual(
+          expect.not.stringContaining(placeholder),
+        );
+      });
+
+      it('should correctly handle Vue dependencies containing astPlugin placeholder in script setup', async () => {
+        const testCase = `<script setup>import { ref } from 'vue'; const arg = ref(${placeholder}('${argument}'));</script>`;
+        await writeFile(testFile, testCase);
+
+        const result = await ctx.rebuild();
+
+        expect((result.outputFiles as OutputFile[])[0].text).toEqual(
+          expect.stringContaining(argument),
+        );
+        expect((result.outputFiles as OutputFile[])[0].text).toEqual(
+          expect.not.stringContaining(placeholder),
+        );
+      });
+
+      describe('Template section', () => {
+        it('should correctly handle Vue dependencies with static class in the template', async () => {
+          const testCase = `<template><div class="${placeholder}(${argument})"></div></template><script>export default {}</script>`;
+          await writeFile(testFile, testCase);
+
+          const result = await ctx.rebuild();
+
+          expect((result.outputFiles as OutputFile[])[0].text).toEqual(
+            expect.stringContaining(`class:"${argument}"`),
+          );
+          expect((result.outputFiles as OutputFile[])[0].text).toEqual(
+            expect.not.stringContaining(placeholder),
+          );
+        });
+      });
     });
   });
 
-  describe('Template section', () => {
-    it('should correctly handle Vue dependencies with static class in the template', async () => {
-      const testCase = `<template><div class="${placeholder}(${argument})"></div></template><script>export default {}</script>`;
+  describe('Combined with esbuild-plugin-ast usage', () => {
+    beforeEach(async () => {
+      const pluginOptions: AstParserOptions = {
+        namespace,
+        visitors,
+      };
+
+      ctx = await context({
+        ...esbuildConfig,
+        plugins: [
+          astParserVue({ scriptNamespace: namespace, ...vuePluginOptions }),
+          astParser(pluginOptions),
+        ],
+        entryPoints: { index: entryPoint },
+        minify: true,
+      });
+    });
+
+    it('should correctly handle dependencies containing astPlugin placeholder in script', async () => {
+      const testDepFile = join(
+        tmpDir,
+        `./packages/${virtualPackage}/test-dep.js`,
+      );
+
+      const testDep = `export function test() { return ${placeholder}('${argument}'); }`;
+      const testCase = `<script setup>import { test } from './test-dep.js'; test();</script>`;
+
+      await writeFile(testDepFile, testDep);
       await writeFile(testFile, testCase);
 
       const result = await ctx.rebuild();
 
       expect((result.outputFiles as OutputFile[])[0].text).toEqual(
-        expect.stringContaining(`class:"${argument}"`),
+        expect.stringContaining(argument),
       );
       expect((result.outputFiles as OutputFile[])[0].text).toEqual(
         expect.not.stringContaining(placeholder),
       );
+
+      await rm(testDepFile);
     });
   });
 });
