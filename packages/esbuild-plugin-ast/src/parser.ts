@@ -16,11 +16,11 @@ const isFunction = (v: unknown) =>
  * Create an AST representation of the provided source and use the
  * visitor object to transform it if provided
  */
-export function parser(source: string, visitors: Visitor | Visitor[]) {
+export function parser(source: string, visitors?: Visitor | Visitor[]) {
   if (!visitors) {
     /* eslint-disable-next-line no-console */
     console.warn(
-      '[esbuildPluginAst]: No visitor provided, the plugin will have no effect.',
+      '[esbuildPluginAst]: No javascript visitor provided, the plugin will have no effect.',
     );
     return source;
   }

@@ -1,21 +1,29 @@
 import { readFile } from 'node:fs/promises';
-import { dirname } from 'node:path';
+import { dirname, extname } from 'node:path';
 
 import { Visitor } from 'estraverse';
+import * as ts from 'typescript';
 
 import { parser } from './parser';
+import { tsParser } from './ts-parser';
+import { loadTsConfig } from './utils';
 
 import type { Plugin, OnResolveArgs } from 'esbuild';
 
 export interface AstParserOptions {
   dependencies?: string[];
-  visitors: Visitor | Visitor[];
+  visitors?: Visitor | Visitor[] | undefined;
+  tsTransformers?:
+    | ts.TransformerFactory<ts.Node>
+    | ts.TransformerFactory<ts.Node>[]
+    | undefined;
   namespace?: string;
 }
 
 export function astParser({
   dependencies,
   visitors,
+  tsTransformers,
   namespace = 'ast-parser',
 }: AstParserOptions): Plugin {
   return {
@@ -25,10 +33,12 @@ export function astParser({
         build.initialOptions.loader || {},
       ).map((key) => key.slice(1));
 
+      const tsConfig = loadTsConfig('./tsconfig.json');
+
       /**
        * Use the entry points as starting point for the plugin
        */
-      build.onResolve({ filter: /\.js/, namespace: 'file' }, (args) => {
+      build.onResolve({ filter: /\.(j|t)s/, namespace: 'file' }, (args) => {
         if (args.kind !== 'entry-point') {
           return;
         }
@@ -114,13 +124,27 @@ export function astParser({
        */
       build.onLoad({ filter: /.*/, namespace }, async (args) => {
         const source = await readFile(args.path, 'utf-8');
+        const isTs = extname(args.path).split('?')[0] === '.ts';
+
+        if (isTs && tsConfig) {
+          return {
+            contents: tsParser({
+              path: args.path,
+              source,
+              transformers: tsTransformers,
+              tsConfig,
+            }),
+            loader: 'ts',
+          };
+        }
 
         return {
           contents: parser(source, visitors),
+          loader: 'js',
         };
       });
     },
   };
 }
 
-export { parser };
+export { parser, tsParser, loadTsConfig };

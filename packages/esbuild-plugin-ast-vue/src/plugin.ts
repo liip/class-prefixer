@@ -1,13 +1,19 @@
 import { readFile } from 'node:fs/promises';
 import { URLSearchParams } from 'node:url';
 
-import { parser, AstParserOptions } from '@liip/esbuild-plugin-ast';
+import {
+  parser,
+  AstParserOptions,
+  tsParser,
+  loadTsConfig,
+} from '@liip/esbuild-plugin-ast';
 import {
   SFCTemplateCompileOptions,
   SFCScriptCompileOptions,
   SFCAsyncStyleCompileOptions,
 } from '@vue/compiler-sfc';
 import { Plugin } from 'esbuild';
+import { Visitor } from 'estraverse';
 
 import { loadEntry } from './entry';
 import { resolveScript } from './script';
@@ -49,6 +55,7 @@ export function astParserVue({
   scriptOptions,
   styleOptions,
   visitors,
+  tsTransformers,
   templateVisitor,
   scriptNamespace,
 }: AstParserVueOptions): Plugin {
@@ -57,6 +64,8 @@ export function astParserVue({
     setup(build) {
       const { sourcemap } = build.initialOptions;
       const isProd = process.env.NODE_ENV === 'production';
+
+      const tsConfig = loadTsConfig('./tsconfig.json');
 
       build.onLoad({ filter: /\.vue$/ }, async (args) => {
         const source = await readFile(args.path, 'utf8');
@@ -100,11 +109,39 @@ export function astParserVue({
           sourcemap: !!sourcemap,
         });
 
+        if (isTs) {
+          return {
+            contents: tsParser({
+              path: args.path,
+              source: code,
+              transformers: tsTransformers,
+              tsConfig,
+            }),
+            loader: 'ts',
+            resolveDir: dirname,
+            errors: error,
+          };
+        }
+
+        const availableVisitors: Visitor[] = [];
+
+        if (visitors) {
+          (Array.isArray(visitors) ? visitors : [visitors]).forEach(
+            (visitor) => {
+              availableVisitors.push(visitor);
+            },
+          );
+        }
+
+        if (templateVisitor) {
+          availableVisitors.push(templateVisitor);
+        }
+
         return {
-          contents: parser(code, [visitors, templateVisitor].flat()),
+          contents: parser(code, availableVisitors),
           errors: error,
           resolveDir: dirname,
-          loader: isTs ? 'ts' : 'js',
+          loader: 'js',
         };
       });
 

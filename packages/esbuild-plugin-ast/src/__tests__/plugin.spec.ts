@@ -3,6 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 import { context, BuildContext, BuildOptions, OutputFile } from 'esbuild';
+import * as ts from 'typescript';
 
 import { astParser, AstParserOptions } from '../plugin';
 
@@ -10,6 +11,16 @@ describe('astParser', () => {
   const placeholder = 'astParser';
   const argument = 'ast-plugin';
   const virtualPackage = 'ast-plugin';
+
+  const createTsTransformer =
+    (visitor: ts.Visitor) =>
+    (context: ts.TransformationContext) =>
+    (rootNode: ts.Node) => {
+      const visit = (node: ts.Node) =>
+        visitor(ts.visitEachChild(node, visit, context)) || node;
+
+      return ts.visitNode(rootNode, visit);
+    };
 
   const pluginOptions: AstParserOptions = {
     visitors: {
@@ -24,6 +35,23 @@ describe('astParser', () => {
         return node;
       },
     },
+
+    tsTransformers: createTsTransformer((node) => {
+      if (
+        ts.isCallExpression(node) &&
+        ts.isIdentifier(node.expression) &&
+        node.expression.text === placeholder
+      ) {
+        if (
+          node.arguments.length > 0 &&
+          ts.isStringLiteral(node.arguments[0])
+        ) {
+          return ts.factory.createStringLiteral(node.arguments[0].text);
+        }
+        return node;
+      }
+      return node;
+    }),
   };
 
   const esbuildConfig: BuildOptions = {
@@ -79,6 +107,40 @@ describe('astParser', () => {
 
     it('should parse and transform JavaScript dependencies', async () => {
       const testCase = `export default function testCase() { return ${placeholder}('${argument}') }`;
+      await writeFile(testFile, testCase);
+
+      const result = await ctx.rebuild();
+
+      expect((result.outputFiles as OutputFile[])[0].text).toEqual(
+        expect.stringContaining(argument),
+      );
+      expect((result.outputFiles as OutputFile[])[0].text).toEqual(
+        expect.not.stringContaining(placeholder),
+      );
+    });
+  });
+
+  describe('TypeScript files', () => {
+    beforeAll(() => {
+      entryPoint = join(tmpDir, `/packages/${virtualPackage}/index.ts`);
+      testFilePath = `./packages/${virtualPackage}/test-case.ts`;
+      testFile = join(tmpDir, testFilePath);
+    });
+
+    beforeEach(async () => {
+      await writeFile(
+        entryPoint,
+        `import testCase from './test-case';\ntestCase();`,
+      );
+
+      ctx = await context({
+        ...esbuildConfig,
+        entryPoints: { index: entryPoint },
+      });
+    });
+
+    it('should parse and transform TypeScript dependencies', async () => {
+      const testCase = `export default function testCase(): string { return ${placeholder}('${argument}') }`;
       await writeFile(testFile, testCase);
 
       const result = await ctx.rebuild();
