@@ -27,3 +27,6 @@ jest-results.xml
 !.vscode/extensions.json
 
 .env
+
+.nx/cache
+.nx/workspace-data
