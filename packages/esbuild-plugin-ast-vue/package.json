@@ -37,14 +37,14 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@types/convert-source-map": "^2.0.1",
-    "@types/hash-sum": "^1.0.0",
-    "esbuild": "^0.19.4"
+    "@types/convert-source-map": "^2.0.3",
+    "@types/hash-sum": "^1.0.2",
+    "esbuild": "^0.19.12"
   },
   "dependencies": {
     "@liip/ast-parsers": "^0.1.0",
     "@liip/esbuild-plugin-ast": "0.3.x",
-    "@vue/compiler-sfc": "^3.3.4",
+    "@vue/compiler-sfc": "^3.4.38",
     "convert-source-map": "^2.0.0",
     "hash-sum": "^2.0.0"
   },

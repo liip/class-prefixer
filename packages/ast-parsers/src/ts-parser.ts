@@ -2,6 +2,11 @@ import * as ts from 'typescript';
 
 import { isFunction } from './utils';
 
+export type AstParserTsTransformers =
+  | ts.TransformerFactory<ts.Node>
+  | ts.TransformerFactory<ts.Node>[]
+  | undefined;
+
 type TsParserOptions = {
   path: string;
   source: string;

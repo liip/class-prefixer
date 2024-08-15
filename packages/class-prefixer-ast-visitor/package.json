@@ -42,7 +42,7 @@
     "@liip/class-prefixer-core": "^0.2.0"
   },
   "devDependencies": {
-    "@types/estree": "^1.0.2",
+    "@types/estree": "^1.0.5",
     "estraverse": "^5.3.0"
   }
 }

@@ -6,6 +6,7 @@
     { "path": "./packages/class-prefixer-core" },
     { "path": "./packages/esbuild-plugin-ast" },
     { "path": "./packages/esbuild-plugin-ast-vue" },
-    { "path": "./packages/postcss-class-prefixer" }
+    { "path": "./packages/postcss-class-prefixer" },
+    { "path": "./packages/rollup-plugin-ast-transform" }
   ]
 }

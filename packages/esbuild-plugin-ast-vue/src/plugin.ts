@@ -134,7 +134,7 @@ export function esbuildAstParserVue({
         }
 
         return {
-          contents: jsParser(code, availableVisitors),
+          contents: jsParser(code, args.path, availableVisitors).code,
           errors: error,
           resolveDir: dirname,
           loader: 'js',
@@ -158,7 +158,7 @@ export function esbuildAstParserVue({
         });
 
         return {
-          contents: jsParser(code, templateVisitor),
+          contents: jsParser(code, args.path, templateVisitor).code,
           pluginData: { code },
           errors,
           resolveDir: dirname,

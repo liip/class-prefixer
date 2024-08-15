@@ -1,44 +1,66 @@
 import { Parser } from 'acorn';
 import { generate } from 'astring';
 import { replace, Visitor } from 'estraverse';
+import { SourceMapGenerator } from 'source-map';
+
+import { isFunction } from './utils';
 
 import type { Node } from 'estree';
 
-const isFunction = (v: unknown) =>
-  [
-    '[object Function]',
-    '[object GeneratorFunction]',
-    '[object AsyncFunction]',
-    '[object Promise]',
-  ].includes(Object.prototype.toString.call(v));
+export type AstParserVisitors = Visitor | Visitor[] | undefined;
 
 /**
  * Create an AST representation of the provided source and use the
  * visitor object to transform it if provided
  */
-export function jsParser(source: string, visitors?: Visitor | Visitor[]) {
+export function jsParser(
+  source: string,
+  file: string,
+  visitors?: AstParserVisitors,
+) {
   if (!visitors) {
     /* eslint-disable-next-line no-console */
     console.warn(
       '[esbuildPluginAst]: No javascript visitor provided, the plugin will have no effect.',
     );
-    return source;
+    return { code: source };
   }
 
-  const visitorArray = Array.isArray(visitors) ? visitors : [visitors];
-
-  let ast = Parser.parse(source, {
+  const ast = Parser.parse(source, {
     ecmaVersion: 'latest',
     sourceType: 'module',
   }) as Node;
 
+  return transformer({ ast, file, visitors });
+}
+
+type TransformerOptions<N extends Node> = {
+  ast: N;
+  file: string;
+  visitors?: AstParserVisitors;
+};
+
+export function transformer<N extends Node>({
+  ast,
+  file,
+  visitors,
+}: TransformerOptions<N>) {
+  const visitorArray = Array.isArray(visitors) ? visitors : [visitors];
+
+  let newAst = ast;
+
   for (const visitor of visitorArray) {
-    if (!isFunction(visitor.enter) && !isFunction(visitor.leave)) {
+    if (
+      typeof visitor === 'undefined' ||
+      (!isFunction(visitor?.enter) && !isFunction(visitor?.leave))
+    ) {
       continue;
     }
 
-    ast = replace(ast, visitor);
+    newAst = replace(newAst, visitor) as N;
   }
 
-  return generate(ast);
+  const map = new SourceMapGenerator({ file });
+
+  return { code: generate(newAst, { sourceMap: map }), ast: newAst, map };
 }

@@ -36,11 +36,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@liip/ast-parsers": "^0.1.0",
-    "@liip/class-prefixer-core": "^0.2.0"
+    "@liip/ast-parsers": "^0.1.0"
   },
   "devDependencies": {
-    "esbuild": "^0.19.4"
+    "esbuild": "^0.19.12"
   },
   "peerDependencies": {
     "esbuild": "0.19.x"
