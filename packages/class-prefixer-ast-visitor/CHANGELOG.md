@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/liip/class-prefixer/compare/@liip/class-prefixer-ast-visitor@0.2.0...@liip/class-prefixer-ast-visitor@0.3.0) (2024-08-15)
+
+### Features
+
+- **rollup:** Add rollup plugin ([c26aa06](https://github.com/liip/class-prefixer/commit/c26aa060f4dcc38afac849288623b06c6ec41038))
+- **ts:** Add Typescript parser support ([eaeaa79](https://github.com/liip/class-prefixer/commit/eaeaa7981327d0eb7cce8ad1842f0a984f5ecebd))
+
 # [0.2.0](https://github.com/liip/class-prefixer/compare/@liip/class-prefixer-ast-visitor@0.1.1...@liip/class-prefixer-ast-visitor@0.2.0) (2023-10-12)
 
 ### chore
