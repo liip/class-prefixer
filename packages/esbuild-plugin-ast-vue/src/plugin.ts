@@ -1,13 +1,15 @@
 import { readFile } from 'node:fs/promises';
 import { URLSearchParams } from 'node:url';
 
-import { parser, AstParserOptions } from '@liip/esbuild-plugin-ast';
+import { loadTsConfig, jsParser, tsParser } from '@liip/ast-parsers';
+import { EsbuildAstParserOptions } from '@liip/esbuild-plugin-ast';
 import {
   SFCTemplateCompileOptions,
   SFCScriptCompileOptions,
   SFCAsyncStyleCompileOptions,
 } from '@vue/compiler-sfc';
 import { Plugin } from 'esbuild';
+import { Visitor } from 'estraverse';
 
 import { loadEntry } from './entry';
 import { resolveScript } from './script';
@@ -17,8 +19,8 @@ import { resolvePath, validateDependency } from './utils';
 
 type ExtractNonArray<T> = T extends Array<any> ? never : T;
 
-export interface AstParserVueOptions
-  extends Omit<AstParserOptions, 'namespace'> {
+export interface EsbuildAstParserVueOptions
+  extends Omit<EsbuildAstParserOptions, 'namespace'> {
   templateOptions?: Pick<
     SFCTemplateCompileOptions,
     | 'compiler'
@@ -36,7 +38,7 @@ export interface AstParserVueOptions
     | 'postcssOptions'
     | 'postcssPlugins'
   >;
-  templateVisitor: ExtractNonArray<AstParserOptions['visitors']>;
+  templateVisitor: ExtractNonArray<EsbuildAstParserOptions['visitors']>;
   scriptNamespace?: string;
 }
 
@@ -44,19 +46,22 @@ type ScriptResolvedReturn = { path: string; namespace?: string };
 
 validateDependency();
 
-export function astParserVue({
+export function esbuildAstParserVue({
   templateOptions,
   scriptOptions,
   styleOptions,
   visitors,
+  tsTransformers,
   templateVisitor,
   scriptNamespace,
-}: AstParserVueOptions): Plugin {
+}: EsbuildAstParserVueOptions): Plugin {
   return {
     name: 'astParserVue',
     setup(build) {
       const { sourcemap } = build.initialOptions;
       const isProd = process.env.NODE_ENV === 'production';
+
+      const tsConfig = loadTsConfig('./tsconfig.json');
 
       build.onLoad({ filter: /\.vue$/ }, async (args) => {
         const source = await readFile(args.path, 'utf8');
@@ -100,11 +105,39 @@ export function astParserVue({
           sourcemap: !!sourcemap,
         });
 
+        if (isTs && tsConfig) {
+          return {
+            contents: tsParser({
+              path: args.path,
+              source: code,
+              transformers: tsTransformers,
+              tsConfig,
+            }),
+            loader: 'ts',
+            resolveDir: dirname,
+            errors: error,
+          };
+        }
+
+        const availableVisitors: Visitor[] = [];
+
+        if (visitors) {
+          (Array.isArray(visitors) ? visitors : [visitors]).forEach(
+            (visitor) => {
+              availableVisitors.push(visitor);
+            },
+          );
+        }
+
+        if (templateVisitor) {
+          availableVisitors.push(templateVisitor);
+        }
+
         return {
-          contents: parser(code, [visitors, templateVisitor].flat()),
+          contents: jsParser(code, args.path, availableVisitors).code,
           errors: error,
           resolveDir: dirname,
-          loader: isTs ? 'ts' : 'js',
+          loader: 'js',
         };
       });
 
@@ -125,7 +158,7 @@ export function astParserVue({
         });
 
         return {
-          contents: parser(code, templateVisitor),
+          contents: jsParser(code, args.path, templateVisitor).code,
           pluginData: { code },
           errors,
           resolveDir: dirname,

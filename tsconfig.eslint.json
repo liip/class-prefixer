@@ -3,11 +3,13 @@
   "compilerOptions": {
     "noEmit": true,
     "types": [
+      "@liip/ast-parsers",
       "@liip/class-prefixer-ast-visitor",
       "@liip/class-prefixer-core",
       "@liip/esbuild-plugin-ast",
       "@liip/esbuild-plugin-ast-vue",
-      "@liip/postcss-class-prefixer"
+      "@liip/postcss-class-prefixer",
+      "@liip/rollup-plugin-ast-transform"
     ]
   },
   "include": ["."]

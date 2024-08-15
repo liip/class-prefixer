@@ -7,9 +7,8 @@ import { fromObject } from 'convert-source-map';
 import { PartialMessage } from 'esbuild';
 
 import { getDescriptorCache, getId } from './cache';
+import { EsbuildAstParserVueOptions } from './plugin';
 import { getTemplateOptions } from './template';
-
-import type { AstParserVueOptions } from './plugin';
 
 export const scriptCache = new WeakMap<SFCDescriptor, SFCScriptBlock | null>();
 
@@ -21,8 +20,8 @@ export function resolveScript({
   sourcemap,
 }: {
   filename: string;
-  scriptOptions: AstParserVueOptions['scriptOptions'];
-  templateOptions: AstParserVueOptions['templateOptions'];
+  scriptOptions: EsbuildAstParserVueOptions['scriptOptions'];
+  templateOptions: EsbuildAstParserVueOptions['templateOptions'];
   isProd: boolean;
   sourcemap: boolean;
 }) {

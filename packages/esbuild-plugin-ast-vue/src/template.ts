@@ -9,7 +9,7 @@ import { PartialMessage } from 'esbuild';
 import { getDescriptorCache, getId } from './cache';
 import { scriptCache } from './script';
 
-import type { AstParserVueOptions } from './plugin';
+import type { EsbuildAstParserVueOptions } from './plugin';
 
 export function resolveTemplate({
   filename,
@@ -17,7 +17,7 @@ export function resolveTemplate({
   isProd,
 }: {
   filename: string;
-  options: AstParserVueOptions['templateOptions'];
+  options: EsbuildAstParserVueOptions['templateOptions'];
   isProd: boolean;
 }) {
   const descriptor = getDescriptorCache(filename);
@@ -59,7 +59,7 @@ export function getTemplateOptions({
   scopeId,
 }: {
   descriptor: SFCDescriptor;
-  options: AstParserVueOptions['templateOptions'];
+  options: EsbuildAstParserVueOptions['templateOptions'];
   isProd: boolean;
   scopeId: string;
 }): Omit<SFCTemplateCompileOptions, 'source'> | undefined {

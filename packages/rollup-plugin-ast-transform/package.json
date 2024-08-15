@@ -1,12 +1,12 @@
 {
-  "name": "@liip/esbuild-plugin-ast-vue",
-  "version": "0.3.1",
-  "description": "Esbuild plugin to parse Vue AST",
+  "name": "@liip/rollup-plugin-ast-transform",
+  "version": "0.1.0",
+  "description": "Plugin to transform JavaScript and TypeScript AST with rollup",
   "keywords": [
-    "esbuild",
+    "rollup",
     "plugin",
     "ast",
-    "vue"
+    "transform"
   ],
   "author": {
     "name": "Liip",
@@ -14,8 +14,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/liip/class-prefixer.git",
-    "directory": "packages/esbuild-plugin-ast-vue"
+    "url": "git+https://github.com/liip/class-prefixer.git",
+    "directory": "packages/rollup-plugin-ast-transform"
   },
   "publishConfig": {
     "@liip:registry": "https://registry.npmjs.org/",
@@ -36,20 +36,11 @@
     "test": "NODE_ENV=test jest",
     "typecheck": "tsc --noEmit"
   },
-  "devDependencies": {
-    "@types/convert-source-map": "^2.0.3",
-    "@types/hash-sum": "^1.0.2",
-    "esbuild": "^0.19.12"
-  },
   "dependencies": {
     "@liip/ast-parsers": "^0.1.0",
-    "@liip/esbuild-plugin-ast": "0.3.x",
-    "@vue/compiler-sfc": "^3.4.38",
-    "convert-source-map": "^2.0.0",
-    "hash-sum": "^2.0.0"
+    "@rollup/pluginutils": "^5.1.0"
   },
-  "peerDependencies": {
-    "@liip/esbuild-plugin-ast": "0.3.x",
-    "esbuild": "0.19.x"
+  "devDependencies": {
+    "@types/rollup": "^0.51.4"
   }
 }

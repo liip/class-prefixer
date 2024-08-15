@@ -1,23 +1,27 @@
 import { readFile } from 'node:fs/promises';
-import { dirname } from 'node:path';
+import { dirname, extname } from 'node:path';
 
-import { Visitor } from 'estraverse';
+import { jsParser, tsParser, loadTsConfig } from '@liip/ast-parsers';
 
-import { parser } from './parser';
-
+import type {
+  AstParserVisitors,
+  AstParserTsTransformers,
+} from '@liip/ast-parsers';
 import type { Plugin, OnResolveArgs } from 'esbuild';
 
-export interface AstParserOptions {
+export interface EsbuildAstParserOptions {
   dependencies?: string[];
-  visitors: Visitor | Visitor[];
+  visitors?: AstParserVisitors;
+  tsTransformers?: AstParserTsTransformers;
   namespace?: string;
 }
 
-export function astParser({
+export function esbuildAstParser({
   dependencies,
   visitors,
+  tsTransformers,
   namespace = 'ast-parser',
-}: AstParserOptions): Plugin {
+}: EsbuildAstParserOptions): Plugin {
   return {
     name: 'astParser',
     setup(build) {
@@ -25,10 +29,12 @@ export function astParser({
         build.initialOptions.loader || {},
       ).map((key) => key.slice(1));
 
+      const tsConfig = loadTsConfig('./tsconfig.json');
+
       /**
        * Use the entry points as starting point for the plugin
        */
-      build.onResolve({ filter: /\.js/, namespace: 'file' }, (args) => {
+      build.onResolve({ filter: /\.(j|t)s/, namespace: 'file' }, (args) => {
         if (args.kind !== 'entry-point') {
           return;
         }
@@ -114,13 +120,25 @@ export function astParser({
        */
       build.onLoad({ filter: /.*/, namespace }, async (args) => {
         const source = await readFile(args.path, 'utf-8');
+        const isTs = extname(args.path).split('?')[0] === '.ts';
+
+        if (isTs && tsConfig) {
+          return {
+            contents: tsParser({
+              path: args.path,
+              source,
+              transformers: tsTransformers,
+              tsConfig,
+            }),
+            loader: 'ts',
+          };
+        }
 
         return {
-          contents: parser(source, visitors),
+          contents: jsParser(source, args.path, visitors).code,
+          loader: 'js',
         };
       });
     },
   };
 }
-
-export { parser };

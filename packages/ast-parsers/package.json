@@ -1,11 +1,11 @@
 {
-  "name": "@liip/esbuild-plugin-ast",
-  "version": "0.3.1",
-  "description": "Esbuild plugin to parse JavaScript AST",
+  "name": "@liip/ast-parsers",
+  "version": "0.1.0",
+  "description": "JavaScript and TypeScript parsers implementations",
   "keywords": [
-    "esbuild",
-    "plugin",
-    "ast"
+    "javascript",
+    "typescript",
+    "parser"
   ],
   "author": {
     "name": "Liip",
@@ -13,14 +13,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/liip/class-prefixer.git",
-    "directory": "packages/esbuild-plugin-ast"
+    "url": "git+https://github.com/liip/class-prefixer.git",
+    "directory": "packages/ast-parsers"
   },
   "publishConfig": {
     "@liip:registry": "https://registry.npmjs.org/",
     "access": "public"
   },
-  "main": "dist/plugin.js",
+  "main": "dist/index.js",
   "files": [
     "/dist"
   ],
@@ -36,12 +36,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@liip/ast-parsers": "^0.1.0"
+    "acorn": "^8.12.1",
+    "astring": "^1.8.6",
+    "estraverse": "^5.3.0",
+    "source-map": "^0.6.1"
   },
   "devDependencies": {
-    "esbuild": "^0.19.12"
-  },
-  "peerDependencies": {
-    "esbuild": "0.19.x"
+    "@types/estraverse": "^5.1.7"
   }
 }
