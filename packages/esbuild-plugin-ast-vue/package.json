@@ -42,7 +42,8 @@
     "esbuild": "^0.19.4"
   },
   "dependencies": {
-    "@liip/esbuild-plugin-ast": "^0.3.1",
+    "@liip/ast-parsers": "^0.1.0",
+    "@liip/esbuild-plugin-ast": "0.3.x",
     "@vue/compiler-sfc": "^3.3.4",
     "convert-source-map": "^2.0.0",
     "hash-sum": "^2.0.0"

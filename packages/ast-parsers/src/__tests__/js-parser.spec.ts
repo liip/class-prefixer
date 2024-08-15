@@ -1,11 +1,11 @@
 import { Visitor } from 'estraverse';
 
-import { parser } from '../parser';
+import { jsParser } from '../js-parser';
 
-describe('parser', () => {
+describe('jsParser', () => {
   const source = 'const value = 1;';
   it('should return the source if no valid visitor is provided', () => {
-    expect(parser(source, {})).toContain(source);
+    expect(jsParser(source, {})).toContain(source);
   });
 
   it('should transform the source if visitor is a valid visitor object', () => {
@@ -23,7 +23,7 @@ describe('parser', () => {
       },
     };
 
-    expect(parser(source, visitor)).toMatch('const value = 2;');
+    expect(jsParser(source, visitor)).toMatch('const value = 2;');
   });
 
   it('should transform the source if multiple visitor are passed', () => {
@@ -55,6 +55,6 @@ describe('parser', () => {
       },
     ];
 
-    expect(parser(source, visitors)).toMatch('const expected = 2;');
+    expect(jsParser(source, visitors)).toMatch('const expected = 2;');
   });
 });

@@ -1,12 +1,8 @@
 import { readFile } from 'node:fs/promises';
 import { URLSearchParams } from 'node:url';
 
-import {
-  parser,
-  AstParserOptions,
-  tsParser,
-  loadTsConfig,
-} from '@liip/esbuild-plugin-ast';
+import { loadTsConfig, jsParser, tsParser } from '@liip/ast-parsers';
+import { EsbuildAstParserOptions } from '@liip/esbuild-plugin-ast';
 import {
   SFCTemplateCompileOptions,
   SFCScriptCompileOptions,
@@ -23,8 +19,8 @@ import { resolvePath, validateDependency } from './utils';
 
 type ExtractNonArray<T> = T extends Array<any> ? never : T;
 
-export interface AstParserVueOptions
-  extends Omit<AstParserOptions, 'namespace'> {
+export interface EsbuildAstParserVueOptions
+  extends Omit<EsbuildAstParserOptions, 'namespace'> {
   templateOptions?: Pick<
     SFCTemplateCompileOptions,
     | 'compiler'
@@ -42,7 +38,7 @@ export interface AstParserVueOptions
     | 'postcssOptions'
     | 'postcssPlugins'
   >;
-  templateVisitor: ExtractNonArray<AstParserOptions['visitors']>;
+  templateVisitor: ExtractNonArray<EsbuildAstParserOptions['visitors']>;
   scriptNamespace?: string;
 }
 
@@ -50,7 +46,7 @@ type ScriptResolvedReturn = { path: string; namespace?: string };
 
 validateDependency();
 
-export function astParserVue({
+export function esbuildAstParserVue({
   templateOptions,
   scriptOptions,
   styleOptions,
@@ -58,7 +54,7 @@ export function astParserVue({
   tsTransformers,
   templateVisitor,
   scriptNamespace,
-}: AstParserVueOptions): Plugin {
+}: EsbuildAstParserVueOptions): Plugin {
   return {
     name: 'astParserVue',
     setup(build) {
@@ -109,7 +105,7 @@ export function astParserVue({
           sourcemap: !!sourcemap,
         });
 
-        if (isTs) {
+        if (isTs && tsConfig) {
           return {
             contents: tsParser({
               path: args.path,
@@ -138,7 +134,7 @@ export function astParserVue({
         }
 
         return {
-          contents: parser(code, availableVisitors),
+          contents: jsParser(code, availableVisitors),
           errors: error,
           resolveDir: dirname,
           loader: 'js',
@@ -162,7 +158,7 @@ export function astParserVue({
         });
 
         return {
-          contents: parser(code, templateVisitor),
+          contents: jsParser(code, templateVisitor),
           pluginData: { code },
           errors,
           resolveDir: dirname,

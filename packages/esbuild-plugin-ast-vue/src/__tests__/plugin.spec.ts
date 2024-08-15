@@ -2,10 +2,13 @@ import { mkdtemp, writeFile, rm, mkdir } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import { astParser, AstParserOptions } from '@liip/esbuild-plugin-ast';
+import {
+  esbuildAstParser,
+  EsbuildAstParserOptions,
+} from '@liip/esbuild-plugin-ast';
 import { context, BuildContext, BuildOptions, OutputFile } from 'esbuild';
 
-import { astParserVue, AstParserVueOptions } from '../plugin';
+import { esbuildAstParserVue, EsbuildAstParserVueOptions } from '../plugin';
 
 describe('astPluginVue', () => {
   const placeholder = 'astPluginVue';
@@ -13,7 +16,7 @@ describe('astPluginVue', () => {
   const virtualPackage = 'ast-plugin-vue';
   const namespace = 'ast-parser-vue';
 
-  const visitors: AstParserOptions['visitors'] = {
+  const visitors: EsbuildAstParserOptions['visitors'] = {
     enter(node) {
       if (
         node.type === 'CallExpression' &&
@@ -26,7 +29,7 @@ describe('astPluginVue', () => {
     },
   };
 
-  const vuePluginOptions: AstParserVueOptions = {
+  const vuePluginOptions: EsbuildAstParserVueOptions = {
     visitors,
     templateVisitor: {
       enter(node) {
@@ -94,7 +97,7 @@ describe('astPluginVue', () => {
     beforeEach(async () => {
       ctx = await context({
         ...esbuildConfig,
-        plugins: [astParserVue(vuePluginOptions)],
+        plugins: [esbuildAstParserVue(vuePluginOptions)],
         entryPoints: { index: entryPoint },
         minify: true,
       });
@@ -149,7 +152,7 @@ describe('astPluginVue', () => {
 
   describe('Combined with esbuild-plugin-ast usage', () => {
     beforeEach(async () => {
-      const pluginOptions: AstParserOptions = {
+      const pluginOptions: EsbuildAstParserOptions = {
         namespace,
         visitors,
       };
@@ -157,8 +160,11 @@ describe('astPluginVue', () => {
       ctx = await context({
         ...esbuildConfig,
         plugins: [
-          astParserVue({ scriptNamespace: namespace, ...vuePluginOptions }),
-          astParser(pluginOptions),
+          esbuildAstParserVue({
+            scriptNamespace: namespace,
+            ...vuePluginOptions,
+          }),
+          esbuildAstParser(pluginOptions),
         ],
         entryPoints: { index: entryPoint },
         minify: true,

@@ -1,31 +1,27 @@
 import { readFile } from 'node:fs/promises';
 import { dirname, extname } from 'node:path';
 
-import { Visitor } from 'estraverse';
-import * as ts from 'typescript';
+import { jsParser, tsParser, loadTsConfig } from '@liip/ast-parsers';
 
-import { parser } from './parser';
-import { tsParser } from './ts-parser';
-import { loadTsConfig } from './utils';
-
+import type {
+  AstParserVisitors,
+  AstParserTsTransformers,
+} from '@liip/ast-parsers';
 import type { Plugin, OnResolveArgs } from 'esbuild';
 
-export interface AstParserOptions {
+export interface EsbuildAstParserOptions {
   dependencies?: string[];
-  visitors?: Visitor | Visitor[] | undefined;
-  tsTransformers?:
-    | ts.TransformerFactory<ts.Node>
-    | ts.TransformerFactory<ts.Node>[]
-    | undefined;
+  visitors?: AstParserVisitors;
+  tsTransformers?: AstParserTsTransformers;
   namespace?: string;
 }
 
-export function astParser({
+export function esbuildAstParser({
   dependencies,
   visitors,
   tsTransformers,
   namespace = 'ast-parser',
-}: AstParserOptions): Plugin {
+}: EsbuildAstParserOptions): Plugin {
   return {
     name: 'astParser',
     setup(build) {
@@ -139,12 +135,10 @@ export function astParser({
         }
 
         return {
-          contents: parser(source, visitors),
+          contents: jsParser(source, visitors),
           loader: 'js',
         };
       });
     },
   };
 }
-
-export { parser, tsParser, loadTsConfig };

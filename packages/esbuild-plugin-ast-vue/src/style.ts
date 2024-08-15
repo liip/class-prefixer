@@ -4,7 +4,7 @@ import { PartialMessage } from 'esbuild';
 
 import { getDescriptorCache, getId } from './cache';
 
-import type { AstParserVueOptions } from './plugin';
+import type { EsbuildAstParserVueOptions } from './plugin';
 
 export async function resolveStyle({
   filename,
@@ -15,7 +15,7 @@ export async function resolveStyle({
   isProd,
 }: {
   filename: string;
-  styleOptions: AstParserVueOptions['styleOptions'];
+  styleOptions: EsbuildAstParserVueOptions['styleOptions'];
   index: number;
   isModule: boolean;
   moduleWithNameImport: boolean;

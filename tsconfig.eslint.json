@@ -3,6 +3,7 @@
   "compilerOptions": {
     "noEmit": true,
     "types": [
+      "@liip/ast-parsers",
       "@liip/class-prefixer-ast-visitor",
       "@liip/class-prefixer-core",
       "@liip/esbuild-plugin-ast",

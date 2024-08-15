@@ -16,7 +16,7 @@ const isFunction = (v: unknown) =>
  * Create an AST representation of the provided source and use the
  * visitor object to transform it if provided
  */
-export function parser(source: string, visitors?: Visitor | Visitor[]) {
+export function jsParser(source: string, visitors?: Visitor | Visitor[]) {
   if (!visitors) {
     /* eslint-disable-next-line no-console */
     console.warn(

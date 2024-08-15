@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { context, BuildContext, BuildOptions, OutputFile } from 'esbuild';
 import * as ts from 'typescript';
 
-import { astParser, AstParserOptions } from '../plugin';
+import { esbuildAstParser, EsbuildAstParserOptions } from '../plugin';
 
 describe('astParser', () => {
   const placeholder = 'astParser';
@@ -22,7 +22,7 @@ describe('astParser', () => {
       return ts.visitNode(rootNode, visit);
     };
 
-  const pluginOptions: AstParserOptions = {
+  const pluginOptions: EsbuildAstParserOptions = {
     visitors: {
       enter(node) {
         if (
@@ -60,7 +60,7 @@ describe('astParser', () => {
     minify: false,
     write: false,
     loader: { '.json': 'json' },
-    plugins: [astParser(pluginOptions)],
+    plugins: [esbuildAstParser(pluginOptions)],
   };
 
   let tmpDir: string;
