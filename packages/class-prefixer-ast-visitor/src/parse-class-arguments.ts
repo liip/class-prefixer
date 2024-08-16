@@ -2,7 +2,7 @@ import { prefixer, PrefixerOptions } from '@liip/class-prefixer-core';
 
 import { updateLiterals } from './update-literals';
 
-import type { Node } from 'estree';
+import type { Node, SourceLocation } from 'estree';
 
 const selectorRegex = /[^a-zA-Z\d\s:_-]/;
 
@@ -13,6 +13,7 @@ const selectorRegex = /[^a-zA-Z\d\s:_-]/;
 export function parseClassArguments<N extends Node>(
   node: N,
   options?: PrefixerOptions,
+  loc?: SourceLocation | null,
 ): N {
   if (node.type === 'CallExpression' && node.arguments) {
     return {
@@ -53,7 +54,7 @@ export function parseClassArguments<N extends Node>(
       );
     }
 
-    return updateLiterals(node, prefixer, options) as N;
+    return updateLiterals({ node, prefixer, options, loc }) as N;
   }
 
   return node;

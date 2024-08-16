@@ -4,7 +4,7 @@ import { join } from 'node:path';
 
 import { rollup } from 'rollup';
 
-import astTransform, { PluginAstTransformOptions } from '../plugin';
+import { astTransform, PluginAstTransformOptions } from '../plugin';
 
 describe('astTransform Plugin', () => {
   const placeholder = 'astParser';
@@ -63,6 +63,7 @@ describe('astTransform Plugin', () => {
                   type: 'Literal',
                   value: argument,
                   raw: `"${argument}"`,
+                  loc: node.loc,
                 };
               }
 

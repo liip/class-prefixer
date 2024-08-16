@@ -135,7 +135,7 @@ export function esbuildAstParser({
         }
 
         return {
-          contents: jsParser(source, args.path, visitors).code,
+          contents: jsParser({ source, file: args.path, visitors }).code,
           loader: 'js',
         };
       });
