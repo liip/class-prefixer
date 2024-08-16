@@ -1,4 +1,6 @@
-import { AstParserVisitors, transformer } from '@liip/ast-parsers';
+import { basename } from 'node:path';
+
+import { AstParserVisitors, jsParser } from '@liip/ast-parsers';
 import { createFilter, FilterPattern } from '@rollup/pluginutils';
 import { Plugin } from 'rollup';
 
@@ -8,7 +10,7 @@ export type PluginAstTransformOptions = {
   visitors: AstParserVisitors;
 };
 
-export default function astTransform({
+export function astTransform({
   include,
   exclude,
   visitors,
@@ -22,19 +24,13 @@ export default function astTransform({
         return null;
       }
 
-      const ast = this.parse(source, { allowReturnOutsideFunction: true });
-
-      const {
-        code,
-        ast: transformedAst,
-        map,
-      } = transformer({
-        ast,
-        file: id,
+      const { code, map } = jsParser({
+        source,
+        file: basename(id),
         visitors,
       });
 
-      return { code, ast: transformedAst, map: map.toString() };
+      return { code, map: map?.toString() ?? null };
     },
   };
 }

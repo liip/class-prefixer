@@ -25,7 +25,11 @@ describe('parseSelectorArguments', () => {
 
     const options = { prefix };
 
-    updateLiterals(originalNode, prefixer as Prefixer, options);
+    updateLiterals({
+      node: originalNode,
+      prefixer: prefixer as Prefixer,
+      options,
+    });
 
     expect(prefixer).toHaveBeenCalledWith(originalNode.value, options);
   });
@@ -50,7 +54,11 @@ describe('parseSelectorArguments', () => {
 
     const options = { prefix };
 
-    updateLiterals(originalNode, prefixer as Prefixer, options);
+    updateLiterals({
+      node: originalNode,
+      prefixer: prefixer as Prefixer,
+      options,
+    });
 
     expect(prefixer).toHaveBeenNthCalledWith(
       1,

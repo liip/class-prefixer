@@ -15,7 +15,7 @@ export const createVisitor = (config?: PrefixerOptions): Visitor => ({
        * Handle `classPrefixer` expression
        */
       if (node.callee.name === 'classPrefixer') {
-        return parseClassArguments(node.arguments[0], config);
+        return parseClassArguments(node.arguments[0], config, node.loc);
       }
 
       /**
@@ -31,7 +31,7 @@ export const createVisitor = (config?: PrefixerOptions): Visitor => ({
           );
         }
 
-        return parseSelectorArguments(node.arguments[0], config);
+        return parseSelectorArguments(node.arguments[0], config, node.loc);
       }
     }
   },

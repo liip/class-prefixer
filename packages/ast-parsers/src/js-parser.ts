@@ -8,46 +8,50 @@ import { isFunction } from './utils';
 import type { Node } from 'estree';
 
 export type AstParserVisitors = Visitor | Visitor[] | undefined;
+export type JsParserOptions = {
+  source: string;
+  file: string;
+  visitors?: AstParserVisitors;
+};
 
 /**
  * Create an AST representation of the provided source and use the
  * visitor object to transform it if provided
  */
-export function jsParser(
-  source: string,
-  file: string,
-  visitors?: AstParserVisitors,
-) {
+export function jsParser({ source, file, visitors }: JsParserOptions) {
   if (!visitors) {
     /* eslint-disable-next-line no-console */
     console.warn(
       '[esbuildPluginAst]: No javascript visitor provided, the plugin will have no effect.',
     );
-    return { code: source };
+    return { code: source, ast: null, map: null };
   }
 
   const ast = Parser.parse(source, {
     ecmaVersion: 'latest',
     sourceType: 'module',
+    locations: true,
   }) as Node;
 
-  return transformer({ ast, file, visitors });
+  return transformer({ ast, file, visitors, source });
 }
 
 type TransformerOptions<N extends Node> = {
   ast: N;
   file: string;
   visitors?: AstParserVisitors;
+  source: string;
 };
 
 export function transformer<N extends Node>({
   ast,
   file,
   visitors,
+  source,
 }: TransformerOptions<N>) {
   const visitorArray = Array.isArray(visitors) ? visitors : [visitors];
 
-  let newAst = ast;
+  let newAst = structuredClone(ast);
 
   for (const visitor of visitorArray) {
     if (
@@ -61,6 +65,9 @@ export function transformer<N extends Node>({
   }
 
   const map = new SourceMapGenerator({ file });
+  map.setSourceContent(file, source);
 
-  return { code: generate(newAst, { sourceMap: map }), ast: newAst, map };
+  const code = generate(newAst, { sourceMap: map });
+
+  return { code, ast: newAst, map };
 }

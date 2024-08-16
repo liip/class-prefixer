@@ -49,7 +49,7 @@
     "hash-sum": "^2.0.0"
   },
   "peerDependencies": {
-    "@liip/esbuild-plugin-ast": "0.3.x",
+    "@liip/esbuild-plugin-ast": "0.4.x",
     "esbuild": "0.19.x"
   }
 }
