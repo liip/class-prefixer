@@ -1,6 +1,6 @@
 {
   "name": "@liip/esbuild-plugin-ast-vue",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Esbuild plugin to parse Vue AST",
   "keywords": [
     "esbuild",
@@ -42,8 +42,8 @@
     "esbuild": "^0.19.12"
   },
   "dependencies": {
-    "@liip/ast-parsers": "^0.2.0",
-    "@liip/esbuild-plugin-ast": "^0.4.0",
+    "@liip/ast-parsers": "^0.2.1",
+    "@liip/esbuild-plugin-ast": "^0.4.1",
     "@vue/compiler-sfc": "^3.4.38",
     "convert-source-map": "^2.0.0",
     "hash-sum": "^2.0.0"
